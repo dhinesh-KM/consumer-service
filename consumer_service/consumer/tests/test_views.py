@@ -1,6 +1,6 @@
 import mongoengine
 from rest_framework import status
-from ..models import Consumer
+from ..models import Consumer,Country
 from rest_framework.test import APITestCase,APIClient
 from django.urls import reverse
 from django.contrib.auth import hashers
@@ -34,15 +34,26 @@ class Test(APITestCase):
         )
         cls.con2.save()
         
-        cls.valid_data = {
+        cls.valid_data1 = {
             "email": "vijay12@gmail.com",
             "password": "dev12",
             "action":"login",
             "logintype":"email"
         }
         
-        response = client.post(reverse("login"), cls.valid_data, format="json")
-        cls.token = response.data['token']
+        cls.valid_data2 = {
+            "email": "vijay1@gmail.com",
+            "password": "dev1",
+            "action":"login",
+            "logintype":"email"
+        }
+        
+        response1 = client.post(reverse("login"), cls.valid_data1, format="json")
+        response2 = client.post(reverse("login"), cls.valid_data2, format="json")
+        cls.token1 = response1.data['token']
+        cls.token2 = response2.data['token']
+        
+        
 
     @classmethod
     def tearDownClass(cls):
@@ -90,20 +101,48 @@ class CitizenshipviewTest(Test):
             "home_address": "brazil home address",
             "mobile_phone": "9488840673"
         }
+        citz1 = {
+            "country": "Austria",
+            "affiliation_type": "citz",
+            "home_address": "brazil home address",
+            "mobile_phone": "9488840673"
+            }
+        citz2 ={
+            "country": "India",
+            "affiliation_type": "tvs",
+            "home_address": "brazil home address",
+            "mobile_phone": "9488840673"
+            }
+        self.cat = 'citizen_second'
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.token1}')
+        self.client.post(reverse("CR_citizenship"), citz1, format="json")
+        self.client.post(reverse("CR_citizenship"), citz2, format="json")
         
-    def test_citz_authorize(self):
-        response = self.client.post(reverse("create_citizenship"), self.valid, format="json")
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-        
+                
     def test_create_valid_citz(self):
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.token}')
-        response = self.client.post(reverse("create_citizenship"), self.valid, format="json")
-        print(response.data)
+        client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.token2}')
+        response = client.post(reverse("CR_citizenship"), self.valid, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
+    def test_citz_authorize(self):
+        self.client.credentials(HTTP_AUTHORIZATION=None)
+        response = self.client.post(reverse("CR_citizenship"), self.valid, format="json")
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        
     def test_citz_affiliation(self):
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.token}')
-        self.valid['affiliation'] = 'tv'
-        response = self.client.post(reverse("create_citizenship"), self.valid, format="json")
-        print(response.data)
+        self.valid['affiliation_type'] = 'tv'
+        response = self.client.post(reverse("CR_citizenship"), self.valid, format="json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        
+    def test_get_citz(self):
+        response = self.client.get(reverse("CR_citizenship"), format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+    def test_citz_notfound(self):
+        response = self.client.get(reverse("RUD_citzenship", kwargs={'cat': 'citizen'}), format="json" )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        
+    def test_get_single_citz(self):
+        response = self.client.get(reverse("RUD_citzenship", kwargs={'cat': 'citizen_second'}), format="json" )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['data'][0]['index'], 'citizen_second')

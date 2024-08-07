@@ -99,9 +99,10 @@ def consumer_login(con):
 def consumer_citizenship(data=None, action=None, con=None, citizen=None):
 
     citz_index = []
-    
+    print("1 ",con.citizen)
     for item in con.citizen:
         citz_index.append(item['index'])
+    print("2 ",con.citizen)
 
     if citizen and citizen not in citz_index:
         raise Custom_Error('Citizenship not found.', status.HTTP_404_NOT_FOUND)
