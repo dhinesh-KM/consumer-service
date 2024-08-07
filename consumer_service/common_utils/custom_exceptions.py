@@ -28,10 +28,4 @@ class Custom_Error(APIException):
         super().__init__(detail=self.detail, code=status_code)
 
 
-class Invalid_credentials(APIException):
-    status_code = status.HTTP_401_UNAUTHORIZED
-    error = True
 
-    def __init__(self, msg):
-        detail = {"msg": msg}
-        super().__init__(detail, code=self.status_code)

@@ -20,29 +20,8 @@ import os,mongoengine,sys
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+mongoengine.connect(host="mongodb+srv://dhineshkumarm:mongo%40123@cluster0.ibc28ov.mongodb.net/Consumer-DB")
 
-MONGODB_DATABASES = {
-    "default": { "host": "mongodb+srv://dhineshkumarm:mongo%40123@cluster0.ibc28ov.mongodb.net/Consumer-DB" },
-    "test": {
-        "name": "test",
-        "host": "localhost",
-        "port": 27017,
-      
-    }
-}
-mongoengine.connect(host=MONGODB_DATABASES['default']['host'])
-'''def is_test():
-    print("***************")
-    print(sys.argv)
-    if 'test' in sys.argv:    
-        return True 
-    
-if 'test' in sys.argv:        
-    db = "test"
-    mongoengine.disconnect()
-    mongoengine.connect(
-    db=MONGODB_DATABASES[db]['name'],
-    host=MONGODB_DATABASES[db]['host'])'''
 
     
 
