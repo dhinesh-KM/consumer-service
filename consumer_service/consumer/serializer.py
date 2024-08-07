@@ -1,7 +1,7 @@
 from typing import Any, Dict
 from rest_framework import serializers
 from .models import Consumer
-from consumer_service.custom_exceptions import *
+from common_utils.custom_exceptions import *
 from .utils import *
 from django.contrib import auth
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -68,7 +68,6 @@ class CitizenshipSerializer(serializers.Serializer):
     alt_phone = serializers.CharField(required=False, allow_blank=True, max_length=10)
 
     def __init__(self, *args, **kwargs):
-        # Call the superclass init method
         super().__init__(*args, **kwargs)
         
         # Get request from context
@@ -95,4 +94,3 @@ class CitizenshipSerializer(serializers.Serializer):
                 "Affiliation_type must be one of the following values ['citz', 'dcitz', 'pr', 'tvs', 'tvw']"
             )
         return attrs
-        # con = consumer_by_cofferid()

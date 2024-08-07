@@ -6,7 +6,7 @@ from bson import ObjectId
 from .serializer import *
 from .dboperations import *
 from rest_framework.permissions import IsAuthenticated
-from .authentication import Jwt_Authentication
+from common_utils.authentication import Jwt_Authentication
 
 
 class Register(generics.CreateAPIView):

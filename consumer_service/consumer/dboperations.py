@@ -1,6 +1,6 @@
 from .models import Consumer, Country
 from .utils import consumer_find
-from consumer_service.custom_exceptions import Custom_Error
+from common_utils.custom_exceptions import Custom_Error
 from django.contrib.auth import hashers
 from rest_framework import status
 from django.conf import settings
@@ -99,10 +99,8 @@ def consumer_login(con):
 def consumer_citizenship(data=None, action=None, con=None, citizen=None):
 
     citz_index = []
-    print("1 ",con.citizen)
     for item in con.citizen:
         citz_index.append(item['index'])
-    print("2 ",con.citizen)
 
     if citizen and citizen not in citz_index:
         raise Custom_Error('Citizenship not found.', status.HTTP_404_NOT_FOUND)

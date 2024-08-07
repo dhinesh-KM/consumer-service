@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from .models import Consumer
-from consumer_service.custom_exceptions import *
+from common_utils.custom_exceptions import *
 
 
 def consumer_by_cofferid(cofferid: str) -> object:

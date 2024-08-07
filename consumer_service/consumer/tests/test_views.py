@@ -21,7 +21,21 @@ class Test(APITestCase):
             country="india",
             first_name="dhinesh",
             last_name="kumar",
-            coffer_id="0000"
+            coffer_id="0000",
+            citizen = [{
+                    "index": "citizen_primary",
+                    "country": "Austria",
+                    "affiliation_type": "citz",
+                    "home_address": "brazil home address",
+                    "mobile_phone": "9488840673"
+                },
+                {
+                    "index": "citizen_second",
+                    "country": "India",
+                    "affiliation_type": "tvs",
+                    "home_address": "brazil home address",
+                    "mobile_phone": "9488840673"
+                }]
         )
         cls.con1.save()
         cls.con2 = Consumer(
@@ -47,6 +61,7 @@ class Test(APITestCase):
             "action":"login",
             "logintype":"email"
         }
+
         
         response1 = client.post(reverse("login"), cls.valid_data1, format="json")
         response2 = client.post(reverse("login"), cls.valid_data2, format="json")
@@ -101,28 +116,24 @@ class CitizenshipviewTest(Test):
             "home_address": "brazil home address",
             "mobile_phone": "9488840673"
         }
-        citz1 = {
-            "country": "Austria",
-            "affiliation_type": "citz",
-            "home_address": "brazil home address",
-            "mobile_phone": "9488840673"
-            }
-        citz2 ={
-            "country": "India",
-            "affiliation_type": "tvs",
-            "home_address": "brazil home address",
-            "mobile_phone": "9488840673"
-            }
+       
         self.cat = 'citizen_second'
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.token1}')
-        self.client.post(reverse("CR_citizenship"), citz1, format="json")
-        self.client.post(reverse("CR_citizenship"), citz2, format="json")
+        self.client.post(reverse("CR_citizenship"), self.valid, format="json")
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.token2}')
+      
         
                 
     def test_create_valid_citz(self):
-        client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.token2}')
-        response = client.post(reverse("CR_citizenship"), self.valid, format="json")
+        response = self.client.post(reverse("CR_citizenship"), self.valid, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+    def test_create_many_citz(self):
+        response = self.client.post(reverse("CR_citizenship"), self.valid, format="json")
+        response = self.client.post(reverse("CR_citizenship"), self.valid, format="json")
+        response = self.client.post(reverse("CR_citizenship"), self.valid, format="json")
+        self.assertEqual(response.status_code, status.HTTP_409_CONFLICT)
+        self.assertEqual(response.data['msg'], 'Too many citizenships.')
+        
         
     def test_citz_authorize(self):
         self.client.credentials(HTTP_AUTHORIZATION=None)
@@ -146,3 +157,29 @@ class CitizenshipviewTest(Test):
         response = self.client.get(reverse("RUD_citzenship", kwargs={'cat': 'citizen_second'}), format="json" )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['data'][0]['index'], 'citizen_second')
+        
+    def test_get_country_affiliations(self):
+        response = self.client.get(reverse("get_affiliations", kwargs={'country': 'India'}), format="json" )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['data'][-1]['aflType'], 'pio')
+        
+    def test_update_citz(self):
+        self.valid = {'affiliation_type' : 'pr'}
+        response = self.client.patch(reverse("RUD_citzenship", kwargs={'cat': 'citizen_second'}), self.valid, format="json" )
+        con = Consumer.objects(coffer_id = "0000").first()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['msg'], 'Citizenship updated successfully.')
+        self.assertEqual(con.citizen[1]['affiliation_type'], 'pr')
+        
+    
+        
+    def test_delete_citz_primary(self):
+        response = self.client.delete(reverse("RUD_citzenship", kwargs={'cat': 'citizen_primary'}),  format="json" )
+        self.assertEqual(response.status_code, status.HTTP_409_CONFLICT)
+        
+    def test_delete_citz(self):
+        response = self.client.delete(reverse("RUD_citzenship", kwargs={'cat': 'citizen_second'}),  format="json" )
+        con = Consumer.objects(coffer_id = "0000").first()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['msg'], 'Citizenship deleted successfully.')
+        self.assertEqual(len(con.citizen), 1)
