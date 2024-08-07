@@ -47,8 +47,6 @@ class RegisterSerializer(serializers.Serializer):
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField()
-    action = serializers.CharField()
-    logintype = serializers.CharField()
 
     def validate(self, attrs):     
         con = consumer_find({"email": attrs.get("email")})
@@ -69,8 +67,9 @@ class CitizenshipSerializer(serializers.Serializer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
+
         # Get request from context
+        print(self.context)
         request = self.context.get('request')
         try:
             if request:

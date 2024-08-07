@@ -7,6 +7,7 @@ from .serializer import *
 from .dboperations import *
 from rest_framework.permissions import IsAuthenticated
 from common_utils.authentication import Jwt_Authentication
+from common_utils.validator import validate_payload
 
 
 class Register(generics.CreateAPIView):
@@ -16,37 +17,37 @@ class Register(generics.CreateAPIView):
         data = serializer.validated_data
         return consumer_create(data)
 
-    def create(self, request, *args, **kwargs) -> Response:
+    def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
         response.data = {"msg": "Consumer created successfully"}
         return response
 
 
-class Login(APIView):
+class Login(generics.GenericAPIView):
+    serializer_class = LoginSerializer
+    
+    @validate_payload
+    def post(self, request):
+        data = consumer_login(self.payload)
+        return Response(data, status=status.HTTP_201_CREATED)
 
-    def post(self, request, format=None) -> Response:
-        serializer = LoginSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            data = consumer_login(serializer.validated_data)
-        return Response(data, status=status.HTTP_200_OK)
 
-
-class citizenship(APIView):
+class Citizenship(generics.GenericAPIView):
     authentication_classes = [Jwt_Authentication]
+    serializer_class = CitizenshipSerializer
 
-    def post(self, request, format=None) -> Response:
-        serializer = CitizenshipSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            data = consumer_citizenship(serializer.validated_data, 'create', request.con)
-        return Response(data, status=status.HTTP_200_OK)
-     
-    def patch(self, request, *args, **kwargs) -> Response:
-        serializer = CitizenshipSerializer(data=request.data, context={'request': request})
-        if serializer.is_valid(raise_exception=True):
-            data = consumer_citizenship(serializer.validated_data, 'update', request.con, kwargs['cat'] )
+    @validate_payload
+    def post(self, request):
+        data = consumer_citizenship(self.data, 'create', request.con)
         return Response(data, status=status.HTTP_200_OK)
     
-    def get(self, request, **kwargs) -> Response:
+    @validate_payload
+    def patch(self, request, *args, **kwargs):
+        data = consumer_citizenship(self.payload, 'update', request.con, kwargs['cat'] )
+        return Response(data, status=status.HTTP_200_OK)
+    
+    def get(self, request, **kwargs):
+        
         if len(kwargs.keys()) == 0:
             serializer = CitizenshipSerializer(request.con.citizen, many=True)
             return Response({'data': serializer.data}, status=status.HTTP_200_OK)
@@ -58,9 +59,7 @@ class citizenship(APIView):
                 data = consumer_affiliations( value )
                 return Response(data, status=status.HTTP_200_OK)
     
-    
-        
-    def delete(self, request, **kwargs) -> Response:
+    def delete(self, request, **kwargs):
         data = consumer_citizenship( action = 'delete', con =  request.con, citizen=kwargs['cat'] )
         return Response(data, status=status.HTTP_200_OK)
         
