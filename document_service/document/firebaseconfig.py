@@ -1,7 +1,6 @@
 import firebase_admin,datetime
 from firebase_admin import credentials,storage
 import firebase_admin.storage
-from document import se
 
 firebase_admin.initialize_app({
     'credential' : credentials.Certificate('serviceaccountkey.json'),
