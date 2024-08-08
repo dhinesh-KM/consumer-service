@@ -5,10 +5,7 @@ from .serializer import *
 from .dboperations import *
 from common_utils.authentication import Jwt_Authentication
 from common_utils.validator import validate_payload
-<<<<<<< HEAD
 from .utils import consumer_by_cofferid
-=======
->>>>>>> cc9e5c6c578cf89656384fb8c303b19d52df6201
 
 
 class Register(generics.CreateAPIView):
@@ -30,12 +27,8 @@ class Login(generics.GenericAPIView):
     @validate_payload
     def post(self, request):
         data = consumer_login(self.payload)
-<<<<<<< HEAD
         serializer = self.get_serializer(data['con'])
         return Response({'token' : data['token'], 'data' : serializer.data}, status=status.HTTP_201_CREATED)
-=======
-        return Response(data, status=status.HTTP_201_CREATED)
->>>>>>> cc9e5c6c578cf89656384fb8c303b19d52df6201
 
 
 class Citizenship(generics.GenericAPIView):

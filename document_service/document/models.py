@@ -1,17 +1,5 @@
 from mongoengine import *
-<<<<<<< HEAD
-from .firebaseconfig import save_obj,signed_url,del_obj
-
-class IdentityDocument(Document):
-    consumer = StringField()
-    category = StringField()  
-    doctype = StringField()  
-    docid = StringField()  
-    expiration_date = DateTimeField() 
-    content_type = StringField()  
-    filename = StringField()    
-    filesize = IntField()  
-=======
+from .firebaseconfig import save_obj,signed_url,del_obj 
 
 class IdentityDocument(Document):
     consumer = StringField()
@@ -22,7 +10,6 @@ class IdentityDocument(Document):
     content_type = StringField()  # File Content-Type
     filename = StringField()    # File Name
     filesize = IntField()  # Integer Value # File Size
->>>>>>> cc9e5c6c578cf89656384fb8c303b19d52df6201
     created = DateTimeField()
     updated = DateTimeField()
     metadata = DictField()
@@ -30,7 +17,6 @@ class IdentityDocument(Document):
     validity_status = StringField()
     verification_vendor = StringField()
     ciphertext = StringField()
-<<<<<<< HEAD
     tags = ListField(default=[])
     
     def file_name(self):
@@ -50,7 +36,4 @@ class IdentityDocument(Document):
     
     def delete_file(self):
         return del_obj(self.file_name())
-     
-=======
-    tags = ListField(default=[])
->>>>>>> cc9e5c6c578cf89656384fb8c303b19d52df6201
+

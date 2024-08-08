@@ -55,13 +55,10 @@ class LoginSerializer(serializers.Serializer):
     mobile_verified = serializers.BooleanField(required=False)
     lastlogin = serializers.DateTimeField(required=False)
     email = serializers.EmailField()
-<<<<<<< HEAD
     mobile = serializers.CharField(required=False)
     pk = serializers.CharField(required=False)
     password_mode = serializers.CharField(required=False)
-=======
     password = serializers.CharField()
->>>>>>> cc9e5c6c578cf89656384fb8c303b19d52df6201
 
     def validate(self, attrs):     
         con = consumer_find({"email": attrs.get("email")})
