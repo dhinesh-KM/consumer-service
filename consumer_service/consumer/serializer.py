@@ -4,7 +4,6 @@ from .models import Consumer
 from common_utils.custom_exceptions import *
 from .utils import *
 from django.contrib import auth
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .dboperations import *
 from django.contrib.auth import hashers
 
