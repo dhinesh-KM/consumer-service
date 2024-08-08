@@ -38,8 +38,8 @@ class Consumer(Document):
     password_reset_token = StringField()
     password_reset_timestamp = DateField()
     password_mode = StringField()
-    joined = DateField()
-    lastlogin = DateField()
+    joined = DateTimeField()
+    lastlogin = DateTimeField()
     dob = DateField()
     email = StringField()
     mobile = StringField()
@@ -93,8 +93,3 @@ class Consumer(Document):
         }
 
 
-class Reminder(Document):
-    consumer = ReferenceField(Consumer)
-    message = StringField()
-    target = DateField()
-    created = DateField()

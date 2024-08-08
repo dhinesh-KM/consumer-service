@@ -32,6 +32,7 @@ mongoengine.connect(host="mongodb+srv://dhineshkumarm:mongo%40123@cluster0.ibc28
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-#^2w+-r-@#dqwidu)&iw!(8--8bg2%nh&he_d++fld0*z4f5#_"
 
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 

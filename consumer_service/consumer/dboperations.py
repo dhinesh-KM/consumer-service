@@ -70,31 +70,19 @@ def consumer_create(data):
 
 
 def consumer_login(con):
+
     payload = {
         "coffer_id": con.coffer_id,
         "pk": str(con.id),
-        'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1),
         'iat': datetime.datetime.utcnow(),
     }
     token = jwt.encode(payload, settings.SECRET_KEY, algorithm="HS256")
     if con.lastlogin is None:
         print("==========>>>>>> SEND WELCOME EMAIL <<<<<<==========")
     con.lastlogin = datetime.datetime.now()
-    r_data = {
-        "coffer_id": con.coffer_id,
-        "custom_uid": con.custom_uid(),
-        "first_name": con.first_name,
-        "last_name": con.last_name,
-        "email_verified": con.email_verified,
-        "mobile_verified": con.mobile_verified,
-        "lastlogin": con.lastlogin,
-        "email": con.email,
-        "mobile": con.mobile if con.mobile else "",
-        "pk": str(con.id),
-        "password_mode": con.password_mode,
-    }
     con.save()
-    return {"token": token, "data": r_data}
+    return {'token' : token, 'con' : con }
 
 def consumer_citizenship(data=None, action=None, con=None, citizen=None):
 

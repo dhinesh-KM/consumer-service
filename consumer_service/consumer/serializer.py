@@ -9,6 +9,7 @@ from .dboperations import *
 from django.contrib.auth import hashers
 
 
+
 class RegisterSerializer(serializers.Serializer):
     email = serializers.EmailField(required=False)
     mobile = serializers.CharField(required=False)
@@ -45,14 +46,37 @@ class RegisterSerializer(serializers.Serializer):
 
 
 class LoginSerializer(serializers.Serializer):
+    password = serializers.CharField(write_only=True)
+    coffer_id = serializers.CharField(required=False)
+    custom_uid = serializers.CharField(required=False)
+    first_name = serializers.CharField(required=False)
+    last_name = serializers.CharField(required=False)
+    email_verified = serializers.BooleanField(required=False) 
+    mobile_verified = serializers.BooleanField(required=False)
+    lastlogin = serializers.DateTimeField(required=False)
     email = serializers.EmailField()
+<<<<<<< HEAD
+    mobile = serializers.CharField(required=False)
+    pk = serializers.CharField(required=False)
+    password_mode = serializers.CharField(required=False)
+=======
     password = serializers.CharField()
+>>>>>>> cc9e5c6c578cf89656384fb8c303b19d52df6201
 
     def validate(self, attrs):     
         con = consumer_find({"email": attrs.get("email")})
         if not hashers.check_password(attrs["password"], con.password):
             raise Validation_Error("Invalid credentials, please try again")
         return con    
+    
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['lastlogin'] = instance.lastlogin.strftime('%b-%d-%Y %I:%M:%S %p')
+        for field in self.fields:
+            if not self.fields[field].write_only:
+                if representation[field] is None: representation[field]=''
+                
+        return representation
 
 
 class CitizenshipSerializer(serializers.Serializer):
@@ -93,3 +117,32 @@ class CitizenshipSerializer(serializers.Serializer):
                 "Affiliation_type must be one of the following values ['citz', 'dcitz', 'pr', 'tvs', 'tvw']"
             )
         return attrs
+    
+class ConsumerSerializer(serializers.Serializer):
+    first_name = serializers.CharField()
+    middle_name = serializers.CharField()
+    last_name = serializers.CharField()
+    dob = serializers.DateField()
+    email = serializers.CharField()
+    mobile = serializers.CharField()
+    country = serializers.CharField()
+    citizen = CitizenshipSerializer(many=True)
+    joined = serializers.DateTimeField()
+    coffer_id = serializers.CharField()
+    email_verified = serializers.BooleanField() 
+    mobile_verified = serializers.BooleanField()
+    
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['joined'] = instance.joined.strftime('%b-%d-%Y %I:%M:%S %p')
+        if representation['dob'] is not None: 
+            instance.dob.strftime('%b-%d-%Y %I:%M:%S %p')
+        for field in self.fields:
+            if representation[field] is None: 
+                representation[field]=''
+
+        return representation
+    
+
+    
+    
