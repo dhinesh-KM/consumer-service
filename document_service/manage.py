@@ -5,9 +5,7 @@ import sys
 
 
 
-def main():
-    """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'document_service.settings.settings')
+
 
 def main():
     """Run administrative tasks."""

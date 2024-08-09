@@ -3,13 +3,14 @@ from .firebaseconfig import save_obj,signed_url,del_obj
 
 class IdentityDocument(Document):
     consumer = StringField()
-    category = StringField()  # citizen_primary
-    doctype = StringField()  # aadhar
-    docid = StringField()  # aadhar-number
-    expiration_date = DateTimeField()  # Expiration Date
-    content_type = StringField()  # File Content-Type
-    filename = StringField()    # File Name
-    filesize = IntField()  # Integer Value # File Size
+    category = StringField() 
+    doctype = StringField()  
+    docid = StringField()  
+    country = StringField()
+    expiration_date = DateTimeField() 
+    content_type = StringField()  
+    filename = StringField()   
+    filesize = IntField()  
     created = DateTimeField()
     updated = DateTimeField()
     metadata = DictField()
@@ -17,13 +18,15 @@ class IdentityDocument(Document):
     validity_status = StringField()
     verification_vendor = StringField()
     ciphertext = StringField()
-    tags = ListField(default=[])
+    tags = ListField(default=['Identity'])
+    
+    meta = {'collection': 'Identity documents'}
     
     def file_name(self):
-        return f'con-{self.consumer}/pdoc-{str(self.id)}'
+        return f'con-{self.consumer}/Idoc-{str(self.id)}'
     
-    def save_file(self):
-        param = { 'contentType': self.content_type }
+    def save_file(self, file):
+        param = { 'contentType': self.content_type, 'file': file }
         return save_obj(self.file_name(),param)
     
     def view(self):

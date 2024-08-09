@@ -1,6 +1,8 @@
 from .models import IdentityDocument
 from rest_framework import serializers
 
+
+
 class IdentityDocSerializer(serializers.Serializer): 
     category = serializers.CharField(read_only=True) 
     doctype = serializers.CharField()
@@ -11,7 +13,7 @@ class IdentityDocSerializer(serializers.Serializer):
     created = serializers.DateTimeField(read_only=True)
     verification_status = serializers.CharField(read_only=True)
     validity_status = serializers.CharField(read_only=True)
-    tags =  serializers.ListField(child=serializers.CharField())
+    tags =  serializers.CharField()
     expiration_date = serializers.DateTimeField(read_only=True)
     country = serializers.CharField(read_only=True)
     id = serializers.CharField(read_only=True)
