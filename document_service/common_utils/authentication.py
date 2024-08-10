@@ -15,7 +15,6 @@ class Jwt_Authentication(BaseAuthentication):
         if not token:
             raise Custom_Error("Unauthorized", status.HTTP_401_UNAUTHORIZED)
         try:
-            print(settings.CONSUMER_SERVICE)
             url = f'{settings.CONSUMER_SERVICE}/api/v1/consumer/data'
             headers = {'Authorization': token}
             decode = jwt.decode(token.split(' ')[1], settings.SECRET_KEY, algorithms=["HS256"])

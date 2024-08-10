@@ -89,7 +89,6 @@ class CitizenshipSerializer(serializers.Serializer):
         super().__init__(*args, **kwargs)
 
         # Get request from context
-        print(self.context)
         request = self.context.get('request')
         try:
             if request:

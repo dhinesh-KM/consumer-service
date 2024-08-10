@@ -39,4 +39,8 @@ class IdentityDocument(Document):
     
     def delete_file(self):
         return del_obj(self.file_name())
+    
+    def url(self):
+        return signed_url(self.file_name())
+    
 

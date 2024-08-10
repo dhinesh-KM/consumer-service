@@ -15,6 +15,14 @@ class IdocView(generics.GenericAPIView):
         return Response(data, status=status.HTTP_201_CREATED)
     
     @validate_payload
+    def get(self, request, *args, **kwargs):
+        data = Idoc_operations( action='get_all', con=request.con, citz=kwargs)
+        print("1",data)
+        data = IdentityDocSerializer(data, many=True)
+        print("2",data.data)
+        return Response(data.data, status=status.HTTP_200_OK)
+    
+    #@validate_payload
     def delete(self, request,  *args, **kwargs):
         print(self.payload)
         data = Idoc_operations(con = request.con, citz = kwargs)

@@ -106,6 +106,7 @@ def consumer_citizenship(data=None, action=None, con=None, citizen=None):
         index = arr[0]
         
         data['index'] = index
+        data['country'] = data['country'].capitalize()
         country = Country(**data)   
         con.citizen.append(country)  
         con.save()

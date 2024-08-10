@@ -12,17 +12,6 @@ class Country(EmbeddedDocument):
     alt_phone = StringField()
     affiliation_countryid = StringField()
     
-    def to_dict(self):
-        return {
-            'index': self.index,
-            'country': self.country,
-            'affiliation_type': self.affiliation_type,
-            'work_address': self.work_address if self.work_address else '' ,
-            'home_address': self.home_address if self.home_address else '',
-            'mobile_phone': self.mobile_phone if self.mobile_phone else '',
-            'work_phone': self.work_phone if self.work_phone else '',
-            'alt_phone': self.alt_phone if self.alt_phone else ''
-        }
 
 
 class Consumer(Document):
@@ -62,34 +51,4 @@ class Consumer(Document):
             custom_uid = self.mobile
         return custom_uid
 
-    def consumer_data(self) -> dict:
-        return {
-            "first_name": self.first_name,
-            "middle_name": self.middle_name,
-            "last_name": self.last_name,
-            "dob": self.dob.strftime("%d/%m/%Y") if self.dob != "" else "",
-            "email": self.email,
-            "mobile": self.mobile,
-            "country": self.country,
-            "citizen": list(
-                map(
-                    lambda citizen: {
-                        "country": citizen.country,
-                        "affiliation_type": citizen.affiliation_type,
-                        "mobile_phone": citizen.mobile_phone or "",
-                        "home_address": citizen.home_address or "",
-                        "alt_phone": citizen.alt_phone or "",
-                        "index": citizen.index,
-                        "work_phone": citizen.work_phone or "",
-                        "work_address": citizen.work_address or "",
-                    },
-                    self.citizen,
-                )
-            ),
-            "joined": self.joined,
-            "coffer_id": self.coffer_id,
-            "email_verified": self.email_verified,
-            "mobile_verified": self.mobile_verified,
-        }
-
-
+    
