@@ -20,7 +20,7 @@ class IdentityDocument(Document):
     ciphertext = StringField()
     tags = ListField(default=['Identity'])
     
-    meta = {'collection': 'Identity documents'}
+    meta = {'collection': 'Identity documents', "indexes": ["consumer"]}
     
     def file_name(self):
         return f'con-{self.consumer}/Idoc-{str(self.id)}'
@@ -29,9 +29,6 @@ class IdentityDocument(Document):
         param = { 'contentType': self.content_type, 'file': file }
         return save_obj(self.file_name(),param)
     
-    def view(self):
-        #params = {'responseType' : self.content_type}
-        return signed_url(self.file_name())
     
     def download(self):
         params = { 'response_disposition' : f'attachment; filename={self.filename}'} #responseType : this.content_type };

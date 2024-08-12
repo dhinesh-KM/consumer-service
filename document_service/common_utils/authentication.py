@@ -12,8 +12,10 @@ class Jwt_Authentication(BaseAuthentication):
 
     def authenticate(self, request):
         token = request.headers.get("Authorization")
+        
         if not token:
             raise Custom_Error("Unauthorized", status.HTTP_401_UNAUTHORIZED)
+        
         try:
             url = f'{settings.CONSUMER_SERVICE}/api/v1/consumer/data'
             headers = {'Authorization': token}
