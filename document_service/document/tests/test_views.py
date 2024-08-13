@@ -201,10 +201,16 @@ class IdocViewTest(Test):
         self.assertNotEqual(len(i1), len(i2))
         
     def test_idoc_view(self):
-        response = self.client.get(reverse("RUD_idoc", kwargs={'cat': 'citizen_primary', 'doctype': 'passport'}), format='json')
+        response = self.client.get(reverse("VD_idoc", kwargs={'cat': 'citizen_primary', 'doctype': 'passport', 'action': 'view'}))
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data['data']), 1)
+        self.assertIn('url',response.data['data'] )
+        
+    def test_idoc_download(self):
+        response = self.client.get(reverse("VD_idoc", kwargs={'cat': 'citizen_primary', 'doctype': 'passport', 'action': 'download'}))
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn('url',response.data['data'] )
         
         
         

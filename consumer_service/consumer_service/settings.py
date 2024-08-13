@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 mongoengine.connect(host="mongodb+srv://dhineshkumarm:mongo%40123@cluster0.ibc28ov.mongodb.net/Consumer-DB")
 
 
-    
+DOCUMENT_SERVICE = 'http://127.0.0.1:5000/'
 
 
 # Quick-start development settings - unsuitable for production

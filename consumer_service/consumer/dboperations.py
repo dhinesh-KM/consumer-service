@@ -84,7 +84,7 @@ def consumer_login(con):
     con.save()
     return {'token' : token, 'con' : con }
 
-def consumer_citizenship(data=None, action=None, con=None, citizen=None):
+def consumer_citizenship(data=None, action=None, con=None, citizen=None, idoc=None):
 
     citz_index = []
     for item in con.citizen:
@@ -130,6 +130,10 @@ def consumer_citizenship(data=None, action=None, con=None, citizen=None):
     if action == 'delete':
         if citizen == 'citizen_primary':
             raise Custom_Error('Citizen primary cannot be deleted', status.HTTP_409_CONFLICT)
+        
+        if idoc > 0:
+            raise Custom_Error('Please delete your digital documents before deleting this Country Affiliation', status.HTTP_409_CONFLICT)
+        
         con.citizen = [item for item in con.citizen if item['index'] != citizen]
         con.save()
         

@@ -4,7 +4,7 @@ from rest_framework import generics
 from .serializer import *
 from .dboperations import *
 from common_utils.authentication import Jwt_Authentication
-from common_utils.validator import validate_payload
+from common_utils.validator import validate_payload,check_user_resources
 from .utils import consumer_by_cofferid
 
 
@@ -37,7 +37,7 @@ class Citizenship(generics.GenericAPIView):
 
     @validate_payload
     def post(self, request):
-        data = consumer_citizenship(self.data, 'create', request.con)
+        data = consumer_citizenship(self.payload, 'create', request.con)
         return Response(data, status=status.HTTP_200_OK)
     
     @validate_payload
@@ -58,8 +58,9 @@ class Citizenship(generics.GenericAPIView):
                 data = consumer_affiliations( value )
                 return Response(data, status=status.HTTP_200_OK)
     
-    def delete(self, request, **kwargs):
-        data = consumer_citizenship( action = 'delete', con =  request.con, citizen=kwargs['cat'] )
+    @check_user_resources
+    def delete(self, request,*args, **kwargs):
+        data = consumer_citizenship( action = 'delete', con =  request.con, citizen = kwargs['cat'], idoc = self.idoc )
         return Response(data, status=status.HTTP_200_OK)
     
 class GetConsumer(generics.GenericAPIView):

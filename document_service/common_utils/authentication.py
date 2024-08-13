@@ -31,8 +31,13 @@ class Jwt_Authentication(BaseAuthentication):
             raise Custom_Error("Invalid token..", status.HTTP_400_BAD_REQUEST)
         except jwt.exceptions.DecodeError:
             raise Custom_Error("Invalid token.", status.HTTP_400_BAD_REQUEST)
+        except requests.exceptions.ConnectionError:
+            print('-----> please start the consumer_service <-------')
+            raise Custom_Error('something went wrong, please try again', status.HTTP_400_BAD_REQUEST)
+            
         except Exception as e:
             raise Custom_Error(f"{str(e)}", status.HTTP_400_BAD_REQUEST)
+        
 
                 
         
