@@ -4,8 +4,9 @@ from ..models import Consumer,Country
 from rest_framework.test import APITestCase,APIClient
 from django.urls import reverse
 from django.contrib.auth import hashers
+from common_utils.test_setup import Test
 
-client = APIClient()
+'''client = APIClient()
 class Test(APITestCase):
     @classmethod
     def setUpClass(cls):
@@ -75,7 +76,7 @@ class Test(APITestCase):
         super(Test, cls).tearDownClass()
         # Drop the test database
         cls.db.drop_database('test_my_database')
-        cls.db.close()
+        cls.db.close()'''
 
 class LoginviewTest(Test):
     def setUp(self) -> None:

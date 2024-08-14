@@ -1,5 +1,5 @@
-from rest_framework.response import Response
-from .models import Consumer
+from consumer.models import Consumer
+from relationship.models import SpecialRelationship
 from common_utils.custom_exceptions import *
 
 
@@ -16,3 +16,10 @@ def consumer_find(data: dict) -> dict:
     if con:
         return con
     raise Not_Found("Consumer not found")
+
+def spe_rel_by_id(id):
+    
+    spr = SpecialRelationship.objects(id=id)
+    if len(spr) > 0:
+        return spr
+    raise Not_Found('Relationship not found')

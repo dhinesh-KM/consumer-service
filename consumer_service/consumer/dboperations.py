@@ -1,6 +1,5 @@
 from .models import Consumer, Country
-from .utils import consumer_find
-from common_utils.custom_exceptions import Custom_Error
+from common_utils.custom_exceptions import CustomError
 from django.contrib.auth import hashers
 from rest_framework import status
 from django.conf import settings
@@ -91,14 +90,14 @@ def consumer_citizenship(data=None, action=None, con=None, citizen=None, idoc=No
         citz_index.append(item['index'])
 
     if citizen and citizen not in citz_index:
-        raise Custom_Error('Citizenship not found.', status.HTTP_404_NOT_FOUND)
+        raise CustomError('Citizenship not found.', status.HTTP_404_NOT_FOUND)
     
     if action == 'create':
         index = ''
         arr = ['citizen_primary','citizen_second','citizen_third','citizen_fourth']
         
         if len(citz_index) == 4:
-            raise Custom_Error('Too many citizenships.', status.HTTP_409_CONFLICT)
+            raise CustomError('Too many citizenships.', status.HTTP_409_CONFLICT)
         
         for item in citz_index:
             if item  in arr:
@@ -129,10 +128,10 @@ def consumer_citizenship(data=None, action=None, con=None, citizen=None, idoc=No
     
     if action == 'delete':
         if citizen == 'citizen_primary':
-            raise Custom_Error('Citizen primary cannot be deleted', status.HTTP_409_CONFLICT)
+            raise CustomError('Citizen primary cannot be deleted', status.HTTP_409_CONFLICT)
         
         if idoc > 0:
-            raise Custom_Error('Please delete your digital documents before deleting this Country Affiliation', status.HTTP_409_CONFLICT)
+            raise CustomError('Please delete your digital documents before deleting this Country Affiliation', status.HTTP_409_CONFLICT)
         
         con.citizen = [item for item in con.citizen if item['index'] != citizen]
         con.save()

@@ -1,10 +1,7 @@
-from typing import Any, Dict
 from rest_framework import serializers
 from .models import Consumer
 from common_utils.custom_exceptions import *
-from .utils import *
-from django.contrib import auth
-from .dboperations import *
+from common_utils.utils import *
 from django.contrib.auth import hashers
 
 
@@ -32,7 +29,7 @@ class RegisterSerializer(serializers.Serializer):
             raise Validation_Error("Only one of email or mobile should be provided.")
         if email:
             if Consumer.objects(email=email).first():
-                raise Custom_Error(
+                raise CustomError(
                     "This email is already in use. Please choose a different one.", status.HTTP_409_CONFLICT
                 )
 

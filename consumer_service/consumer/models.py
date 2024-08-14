@@ -40,7 +40,7 @@ class Consumer(Document):
 
     meta = {"indexes": ["coffer_id"]}
 
-    def consumer_Fullname(self) -> str:
+    def consumer_fullname(self) -> str:
         return f"{self.first_name} {self.last_name}"
 
     def custom_uid(self) -> str:

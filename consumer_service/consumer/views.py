@@ -5,7 +5,7 @@ from .serializer import *
 from .dboperations import *
 from common_utils.authentication import Jwt_Authentication
 from common_utils.validator import validate_payload,check_user_resources
-from .utils import consumer_by_cofferid
+from common_utils.utils import consumer_by_cofferid
 
 
 class Register(generics.CreateAPIView):
