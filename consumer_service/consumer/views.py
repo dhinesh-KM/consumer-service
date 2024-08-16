@@ -4,7 +4,7 @@ from rest_framework import generics
 from .serializer import *
 from .dboperations import *
 from common_utils.authentication import Jwt_Authentication
-from common_utils.validator import validate_payload,check_user_resources
+from consumer_service.common_utils.decorator import validate_payload,check_user_resources
 from common_utils.utils import consumer_by_cofferid
 
 
