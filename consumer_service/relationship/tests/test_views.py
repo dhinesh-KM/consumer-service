@@ -41,6 +41,8 @@ class SpecRelViewTest(Test):
             'description' : self.data['description'],
         }
         
+        
+        
         self.spr1 = SpecialRelationship(**data1)
         self.spr1.save()
         
@@ -49,7 +51,7 @@ class SpecRelViewTest(Test):
 
     
     def test_get_consumers(self):
-        response = self.client.get(reverse("get_cons"))
+        response = self.client.get(reverse("get_consumers"))
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data['data']), 2)
@@ -116,11 +118,26 @@ class SpecRelViewTest(Test):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['msg'], 'Relationship accepted successfully.')
         
-    def test_relship_acpt(self):
+    def test_get_relship(self):
 
-        response = self.client.get(reverse("all_rel"), format='json')
-        print(response.data)
+        response = self.client.get(reverse("all_relationships"), format='json')
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data['data']), 2)
+        
+    '''def test_get_relship_bytag(self):
+        self.spr2.requestor_tags = ['Lauditor']
+
+        response = self.client.get(reverse("relationships_bytag", kwargs={'tag': 'Personal'}), format='json')
+        print(response.data['data'])
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        #self.assertEqual(len(response.data['data']), 2)
+        
+    def test_get_relship_tagcount(self):
+
+        response = self.client.get(reverse("tag_count"), format='json')
+        print(response.data['counts'])
+        self.assertEqual(response.status_code, status.HTTP_200_OK)'''
     
         
         

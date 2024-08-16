@@ -21,6 +21,7 @@ class Jwt_Authentication(BaseAuthentication):
             headers = {'Authorization': token}
             decode = jwt.decode(token.split(' ')[1], settings.SECRET_KEY, algorithms=["HS256"])
             con = requests.get(url, headers=headers)
+            print(con.json())
             request.con = con.json()['data']
             request.decode = decode
             return (con, decode)

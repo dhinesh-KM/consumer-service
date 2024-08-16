@@ -1,9 +1,9 @@
 from rest_framework import generics,status
 from rest_framework.response import Response
-from .serializer import IdentityDocSerializer,IdocPatchSerializer, IdocPostSerializer
+from .serializer import *
 from common_utils.validator import validate_payload
 from common_utils.authentication import Jwt_Authentication
-from .dboperations import idoc_operations
+from .dboperations import *
 import datetime
 
 class IdocView(generics.GenericAPIView):
@@ -50,5 +50,27 @@ class IdocView(generics.GenericAPIView):
     def delete(self, request,  *args, **kwargs):
         data = idoc_operations(action='delete', con = request.con, citz = kwargs)
         return Response(data, status=status.HTTP_200_OK)
+    
+    
+class IdocUtilView(generics.GenericAPIView):
+    authentication_classes = [Jwt_Authentication]
+    
+    def post(self, request, *args, **kwargs):
+        url_name = request.resolver_match.url_name
+        if url_name == 'missing_ids':
+            data = getAllDocs(request.data, request.con['coffer_id'])
+        if url_name == 'doc_details':
+            instances = getAllDocsDetails(request.data)
+            serializer = SharedIdentityDocSerializer(instances, many=True)
+            data = {'data' : serializer.data}
+            
+        return Response(data, status=status.HTTP_200_OK)
+    
+    def get(self, request, *args, **kwargs):
+        data = document_action(kwargs)
+        return Response(data, status=status.HTTP_200_OK)
+    
+           
+        
 
 

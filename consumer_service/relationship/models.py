@@ -9,7 +9,7 @@ class SpecialRelationship(Document):
     acceptor = GenericLazyReferenceField()
     created = DateTimeField() 
     accepted_date = DateTimeField()
-    isaccepted = BooleanField()
+    isaccepted = BooleanField(default=False)
     description = StringField()
     status = StringField()
     reject_reason = StringField()

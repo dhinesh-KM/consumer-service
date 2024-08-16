@@ -31,13 +31,13 @@ class SpecRelAcpSerializer(serializers.Serializer):
     
 class SpecRelSerializer(serializers.Serializer):
     id = serializers.CharField(required=False, default=True)
-    isSpecial = serializers.BooleanField(required=False)
+    isSpecial = serializers.BooleanField(required=False, default=True)
     canAccept = serializers.BooleanField(required=False, default=False)
     business_name = serializers.CharField(required=False)
     business_category = serializers.CharField(required=False, default='')
     products = serializers.ListField(child = serializers.CharField(), required=False, default= [])
     description = serializers.CharField(required=False,  default='')
-    isaccepted = serializers.BooleanField(required=False, default=False)
+    isaccepted = serializers.BooleanField(required=False)
     isarchived = serializers.BooleanField(required=False, default=False)
     status = serializers.CharField(required=False) 
     documents = serializers.DictField(required=False, default={})
@@ -59,7 +59,7 @@ class SpecRelSerializer(serializers.Serializer):
             representation['guid'] = con.custom_uid()
             #representation['profileUrl'] =  ''
             representation['tags'] = ['Personal']
-
+            
         if instance['acceptor_uid'] == coffer_id:
             con = consumer_by_cofferid(instance['requestor_uid'])
             representation['biztype'] = 'consumer'

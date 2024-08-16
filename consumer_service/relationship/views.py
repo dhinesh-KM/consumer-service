@@ -23,6 +23,7 @@ class SpecRelView(generics.GenericAPIView):
         return GetConSerializer
     
     def get(self, request, *args, **kwargs):
+        print("---")
         instance = get_consumer(request.decode['coffer_id'])
         serializer = GetConSerializer(instance, many=True)
         return Response({'data': serializer.data}, status=status.HTTP_200_OK)
@@ -38,8 +39,23 @@ class SpecRelView(generics.GenericAPIView):
             return Response(data, status=status.HTTP_200_OK)
     
     def get(self, request, *args, **kwargs):
-        instances = get_relationships(self.request.con['coffer_id'])
-        print(instances , len(instances))
-        serializer = SpecRelSerializer(instances,  context={ 'con':self.request.con['coffer_id']}, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        url_name = request.resolver_match.url_name
+        if url_name == 'relationships_bytag':
+            instance = get_relationships(self.request.con['coffer_id'], tag = kwargs['tag'])
+        
+        elif url_name == 'all_relationships':
+            instance = get_relationships(self.request.con['coffer_id'])
+            
+        elif url_name == 'get_consumers':
+            print("---")
+            instance = get_consumer(request.decode['coffer_id'])
+            serializer = GetConSerializer(instance, many=True)
+            return Response({'data': serializer.data}, status=status.HTTP_200_OK)
+        
+        else:
+            data = get_relationships(self.request.con['coffer_id'], action='count')
+            return Response({'counts':data}, status=status.HTTP_200_OK)
+            
+        serializer = SpecRelSerializer(instance, many=True, context={ 'con':self.request.con['coffer_id']} )
+        return Response({'data':serializer.data}, status=status.HTTP_200_OK)
         

@@ -65,6 +65,18 @@ class IdentityDocSerializer(serializers.Serializer):
         
         representation['expiration_date'] = instance.created.strftime('%b-%d-%Y %I:%M:%S %p') if representation['expiration_date'] is not None else 'NA'
         return representation
+    
+    
+class SharedIdentityDocSerializer(serializers.Serializer):
+    docname =  serializers.CharField(source='doctype', required=False)
+    docid =  serializers.CharField(required=False)
+    Id =  serializers.CharField(source='id', required=False)
+    doctype =  serializers.CharField(required=False, default='Identity')
+    category =  serializers.CharField(required=False)
+    url = serializers.CharField(required=False)
+    content_type = serializers.CharField(required=False)
+
+        
         
 
     

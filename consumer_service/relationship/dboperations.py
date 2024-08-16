@@ -58,16 +58,45 @@ def accept_consumer(data, con, relid):
                                         'accepted_date' : datetime.datetime.now(),
                                         'status' : 'accepted'
             }}
-            spr.update_one(**update_data)
+
+            spr.update_one(__raw__= update_data)
 
     return { 'msg'  : 'Relationship accepted successfully.'}
 
+#get all relationship, by tag, tag count
+def get_relationships(cofferid, tag=None, action=None):
+        '''if tag is not None:
+            spr1 = list(SpecialRelationship.objects(requestor_uid = cofferid, requestor_tags = tag))
+            spr2 = list(SpecialRelationship.objects(acceptor_uid = cofferid, acceptor_tags = tag))
+        else:'''
+        
+        spr1 = list(SpecialRelationship.objects(requestor_uid = cofferid))
+        spr2 = list(SpecialRelationship.objects(acceptor_uid = cofferid))
+        
+        '''if action == 'count':
+            spr = spr1 + spr2
+            
+            tag = { 'Personal': 0, 'ContentCoffer': 0, 'Lauditor': 0 }
+            tag_count = []
+            
+            for item in spr:
+                if item['requestor_uid'] == cofferid:
+                    tag[item['requestor_tags'][0]] += 1
+                    
+                if item['acceptor_uid'] == cofferid:
+                    tag[item['acceptor_tags'][0]] += 1
+                    
+            for key, value in tag.items():
+                if value > 0:
+                    tag_count.append({ 'tagName': key, 'count': value })
+                    
+            return tag_count'''
+        
+        return spr1 + spr2
 
-def get_relationships(cofferid):
-    spr1 = SpecialRelationship.objects.filter(requestor_uid = cofferid)
-    spr2 = SpecialRelationship.objects.filter(acceptor_uid = cofferid)
-    print(spr1, spr2)
-    s = list(chain(spr1, spr2))
-    print(s)
-    return spr1
+
+    
+    
+        
+            
     

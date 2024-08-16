@@ -3,6 +3,7 @@ import datetime
 from common_utils.custom_exceptions import Custom_Error
 from rest_framework import status
 from common_utils.utils import doctype_validate
+from bson import ObjectId
 
 def idoc_by_filter( action=None, **filter):
 
@@ -98,8 +99,64 @@ def idoc_operations(data=None, action=None, con=None, citz=None):
             return {'url': idoc.download()}
         
         
+def getAllDocs(data, cofferid):
+
+    ids = list(map(lambda id: ObjectId(id),data['docid']))
+
+    idocs = list(IdentityDocument.objects().aggregate([
+        {
+          '$match': {
+            '_id': { '$in': ids }, 'consumer': cofferid
+          }
+        },
+        {
+          '$group': {
+            '_id': None,
+            'existingIds': {'$push': '$_id'},
+            'ExistingIds': {'$push': { '$toString': "$_id"} },
+            'existingNames': {'$push': "$name"}
+          }
+        },
+        {
+          '$project': {
+            '_id': 0,
+            #'existingIds': 1,
+            'existingNames': 1,
+            'missingIds': {  
+                '$map' : { 
+                    'input': {
+                        '$setDifference' : [ids, "$existingIds"]
+                    }, 
+                    'as': 'id',
+                    'in' : { '$toString': '$$id'}
+                }
+            }
+         }
+        }
+      ]))
+    
+    print(idocs)
+    
+    mis_Ids, names = (ids, []) if len(idocs) == 0 else (idocs[0]['missingIds'], idocs[0]['existingNames'])
+
+    return {'data': {'docname': names, 'missingIds': mis_Ids}}
 
         
+def getAllDocsDetails(data):
+    ids = list(map(lambda id: ObjectId(id),data['docid']))
+    return IdentityDocument.objects(id__in =  ids)
+
+def document_action(data):
+    action = data['action']
+    idoc = IdentityDocument.objects(id=data['id']).first()
+    if idoc == None:
+        raise Custom_Error('Document not found', status.HTTP_404_NOT_FOUND)
+    if action == 'view':
+        url = idoc.url() 
+    if action == 'download':
+        url = idoc.download()
+        
+    return {'url': url}
         
         
         
