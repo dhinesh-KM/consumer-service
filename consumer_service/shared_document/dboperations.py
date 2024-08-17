@@ -5,32 +5,37 @@ from rest_framework import status
 
 
 def share_docs(relid, docs, cofferid, data, action):
-    sharedWith, err_Msg = "", name = "Documents", result_Msg
-    spr  = spe_rel_by_id(relid)
+    sharedWith = ''
+    err_msg = ''
+    name = "Documents"
+    result_msg = ''
+
+    spr  = spe_rel_by_id(relid).first()
     
-    if not spr.isaccepted:
+    if not spr['isaccepted']:
         raise CustomError("Relationship not accepted.", status.HTTP_202_ACCEPTED)
     
-    for data in docs:
-        id = docs[data].missingIds
-        len = id.length
-        if len != 0:
-            if len == 1:
-                err_Msg += f'{data} document with this ID {id} not found' 
-            else:
-                err_Msg += f'{data} documents with these IDs {id} not found'
+    print("///",docs)
+    id = docs['missingIds']
+    length = len(id)
+    print(id)
+    if length != 0:
+        if length == 1:
+            err_msg += f'Document with this ID {id[0]} not found' 
+        else:
+            err_msg += f'Documents with these IDs {id} not found'
              
-    if err_Msg.length != 0: 
-        raise CustomError(err_Msg, status.HTTP_404_NOT_FOUND)
+    if len(err_msg) != 0: 
+        raise CustomError(err_msg, status.HTTP_404_NOT_FOUND)
     
-    sharedWith = spr.acceptor_uid
+    sharedWith = spr['acceptor_uid']
     if sharedWith == cofferid:
-        sharedWith = spr.requestor_uid
+        sharedWith = spr['requestor_uid']
         
     con =  consumer_by_cofferid(sharedWith)
     if action == 'share':
         if len(data) == 1:
-            name = docs[data[0].doctype].docname
+            name = docs['docname'][0]
         
         for item in data:
             shrdoc = SharedDocument.objects(__raw__ = { 'relationship_id': relid, 'docid': item['docid'] }).first()
@@ -46,21 +51,25 @@ def share_docs(relid, docs, cofferid, data, action):
                 shr = SharedDocument(**rel_data)
                 shr.save()
 
-        result_Msg = f'{name} shared with {con.consumer_fullname()}.'
+        result_msg = f'{name} shared with {con.consumer_fullname()}.'
         
     else:
         if len(data) == 1:
-            name = docs[data[0]['doctype']]['docname']
+            name = docs['docname'][0]
 
         docids = []
         for item in data:
-            docids.append(item['id'])
+            docids.append(item['docid'])
 
-        SharedDocument.objects(__raw__ = { 'relationship_id': relid, 'docid': { '$in': docids }, 'shared_by': cofferid }).delete()
+        print(docids,relid,cofferid)
+        f = { 'relationship_id': relid, 'docid': { '$in': docids }, 'shared_by': cofferid }
+        d = SharedDocument.objects(**f)
+        print('==',d)
+        s = SharedDocument.objects(__raw__ = { 'relationship_id': relid, 'docid': { '$in': docids }, 'shared_by': cofferid }).delete()
+        print(s)
+        result_msg = f'{name} unshared with {con.consumer_fullname()}.'
         
-        result_Msg = f'{name} unshared with {con.consumer_fullname()}.'
-        
-    return { 'msg': result_Msg }
+    return { 'msg': result_msg }
 
 
     

@@ -113,8 +113,8 @@ def getAllDocs(data, cofferid):
           '$group': {
             '_id': None,
             'existingIds': {'$push': '$_id'},
-            'ExistingIds': {'$push': { '$toString': "$_id"} },
-            'existingNames': {'$push': "$name"}
+            #'ExistingIds': {'$push': { '$toString': "$_id"} },
+            'existingNames': {'$push': "$doctype"}
           }
         },
         {
@@ -135,7 +135,7 @@ def getAllDocs(data, cofferid):
         }
       ]))
     
-    print(idocs)
+    #print("***",idocs)
     
     mis_Ids, names = (ids, []) if len(idocs) == 0 else (idocs[0]['missingIds'], idocs[0]['existingNames'])
 
@@ -147,15 +147,16 @@ def getAllDocsDetails(data):
     return IdentityDocument.objects(id__in =  ids)
 
 def document_action(data):
+    url = ''
     action = data['action']
     idoc = IdentityDocument.objects(id=data['id']).first()
     if idoc == None:
-        raise Custom_Error('Document not found', status.HTTP_404_NOT_FOUND)
+        raise Custom_Error(f'Document with this id {data['id']} not found', status.HTTP_404_NOT_FOUND)
     if action == 'view':
         url = idoc.url() 
     if action == 'download':
         url = idoc.download()
-        
+
     return {'url': url}
         
         

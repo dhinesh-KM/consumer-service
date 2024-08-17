@@ -21,6 +21,6 @@ from django.urls import path, include
 urlpatterns = [
     path("api/v1/consumer/", include("consumer.urls")),
     path("api/v1/consumer/relationship/", include("relationship.urls")),
-    #path("api/v1/consumer/relationship/", include("shared_document.urls")),
+    path("api/v1/consumer/relationship/", include("shared_document.urls")),
     path("admin/", admin.site.urls),
 ]

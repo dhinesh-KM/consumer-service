@@ -217,17 +217,20 @@ class IdocViewTest(Test):
     def test_idoc_miss(self):
         
         response = self.client.post(reverse("missing_ids"), {'docid': [str(self.idoc1.id), str(self.idoc2.id), str(ObjectId())]}, format='json')
+        
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
     def test_idoc_details(self):
         
         response = self.client.post(reverse("doc_details"), {'docid': [str(self.idoc1.id), str(self.idoc2.id), str(ObjectId())]}, format='json')
+        
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data['data']), 2)
         
     def test_idoc_action(self):
         
-        response = self.client.get(reverse("action", kwargs={'action':'views', 'id':self.idoc1.id}), format='json')
+        response = self.client.get(reverse("action", kwargs={'action':'views', 'id':str(ObjectId())}), format='json')
+        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
         

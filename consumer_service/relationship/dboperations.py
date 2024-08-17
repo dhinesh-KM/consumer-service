@@ -47,7 +47,7 @@ def request_consumer(data, con):
         
 def accept_consumer(data, con, relid):
     spr =  spe_rel_by_id(relid)
-    print(spr.to_json())
+
     if spr.first()['isaccepted']:
         raise CustomError('Relationship already accepted.', status.HTTP_409_CONFLICT)
     

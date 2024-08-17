@@ -9,6 +9,7 @@ import datetime
 
 client = APIClient()
 class SpecRelViewTest(Test):
+
     def setUp(self) -> None:
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.token2}')
         
@@ -17,7 +18,7 @@ class SpecRelViewTest(Test):
             'consumerId': str(self.id2)
         }
         
-        data1 = {
+        '''data1 = {
             'requestor_type' : 'consumer',
             'requestor_uid' : self.con1['coffer_id'],
             'requestor_tags' : ['Personal'],
@@ -48,7 +49,7 @@ class SpecRelViewTest(Test):
         
         self.spr2 = SpecialRelationship(**data2)
         self.spr2.save()
-
+'''
     
     def test_get_consumers(self):
         response = self.client.get(reverse("get_consumers"))

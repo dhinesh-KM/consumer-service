@@ -13,4 +13,4 @@ class SharedDocSerializer(serializers.Serializer):
         return attrs
         
 class SharedDocSerializer(serializers.Serializer):
-    data = serializers.ListField( child = SharedDocSerializer)
+    data = serializers.ListField( child = SharedDocSerializer())
