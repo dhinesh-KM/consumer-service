@@ -23,7 +23,6 @@ class SpecRelView(generics.GenericAPIView):
         return GetConSerializer
     
     def get(self, request, *args, **kwargs):
-        print("---")
         instance = get_consumer(request.decode['coffer_id'])
         serializer = GetConSerializer(instance, many=True)
         return Response({'data': serializer.data}, status=status.HTTP_200_OK)
@@ -47,7 +46,6 @@ class SpecRelView(generics.GenericAPIView):
             instance = get_relationships(self.request.con['coffer_id'])
             
         elif url_name == 'get_consumers':
-            print("---")
             instance = get_consumer(request.decode['coffer_id'])
             serializer = GetConSerializer(instance, many=True)
             return Response({'data': serializer.data}, status=status.HTTP_200_OK)

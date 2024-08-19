@@ -51,12 +51,13 @@ def accept_consumer(data, con, relid):
     spr =  spe_rel_by_id(relid)
 
     if spr.first()['isaccepted']:
-        print('//', spr.first()['isaccepted'])
         raise CustomError('Relationship already accepted.', status.HTTP_409_CONFLICT)
-    print(spr.to_json())
+
     if data['response'] == 'accept':
+        
             if spr.first()['acceptor_uid'] != con['coffer_id']:
                 raise CustomError('You are not permitted to accept the relationship', status.HTTP_409_CONFLICT)
+            
             update_data = {'$set': {    'isaccepted' : True,
                                         'accepted_date' : datetime.datetime.now(),
                                         'status' : 'accepted'

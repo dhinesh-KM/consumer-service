@@ -230,7 +230,7 @@ class IdocViewTest(Test):
     def test_idoc_action(self):
         
         response = self.client.get(reverse("action", kwargs={'action':'views', 'id':str(ObjectId())}), format='json')
-        print(response.data)
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
         

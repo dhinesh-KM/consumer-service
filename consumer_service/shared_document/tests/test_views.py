@@ -112,7 +112,7 @@ class SharedDocViewTest(Test):
         self.mock_missing_ids.return_value = self.mock_response
           
         response = self.client.post(reverse("share_unshare_docs", kwargs ={'rel_id': self.spr1.id, 'action': 'share'}), self.test_data, format='json')
-        print(response.data)
+
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['msg'], f'Document with this ID {str(self.docid1)} not found')
         
@@ -124,7 +124,7 @@ class SharedDocViewTest(Test):
         self.mock_missing_ids.return_value = self.mock_response
         
         response = self.client.post(reverse("share_unshare_docs", kwargs ={'rel_id': self.spr1.id, 'action': 'share'}), self.test_data, format='json')
-        print(response.data)
+
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['msg'], f'Documents with these IDs {[str(self.docid1), str(self.docid2)]} not found')
         
@@ -158,7 +158,6 @@ class SharedDocViewTest(Test):
         }
         
         response = self.client.post(reverse("share_unshare_docs", kwargs ={'rel_id': self.spr1.id, 'action': 'unshare'}), self.test_data, format='json')
-        print(response.data)
 
         s2 = SharedDocument.objects()
 
@@ -197,7 +196,7 @@ class SharedDocViewTest(Test):
         self.mock_document_action.return_value = self.mock_response
         
         response = self.client.get(reverse("action", kwargs ={'rel_id': self.spr1.id, 'docid': self.docid1, 'action': 'view'}),format='json')
-        print(response.data)
+
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['msg'], f'Document with this id {self.docid1} not found')
         

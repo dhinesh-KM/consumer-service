@@ -29,7 +29,7 @@ class SpecRelViewTest(Test):
     def test_relship_req_con_notfound(self):
         self.data['consumerId'] = str(ObjectId())
         response = self.client.post(reverse("request_con"), self.data, format='json')
-        print(response.data)
+
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         
     def test_relship_req_con_ishim(self):

@@ -72,41 +72,6 @@ class SpecRelSerializer(serializers.Serializer):
             
         return representation
             
-    
-    '''id = serializers.SerializerMethodField()
-    isSpecial = serializers.SerializerMethodField()
-    canAccept = serializers.SerializerMethodField()
-    business_name = serializers.SerializerMethodField()
-    business_category = serializers.CharField(required=False, default='')
-    products = serializers.ListField(child = serializers.CharField(), default= [])
-    description = serializers.SerializerMethodField(required=False, default='')
-    isaccepted = serializers.SerializerMethodField()
-    isarchived = serializers.BooleanField(required=False, default=False)
-    status = serializers.SerializerMethodField() 
-    documents = serializers.DictField(required=False, default={})
-    profile = serializers.DictField(required=False, default={})
-    biztype =  serializers.SerializerMethodField() 
-    email = serializers.SerializerMethodField() 
-    mobile = serializers.SerializerMethodField() 
-    guid = serializers.SerializerMethodField() 
-    tags = serializers.SerializerMethodField() 
-    profileUrl = serializers.CharField(required=False, default='')'''
-    
-    
-    '''def get_id(self,obj):
-        print("**********",obj)
-        con = self.context.get('con')
-        print(con)
-        print(self.instance.to_json())
-        return con'''
-    
-'''class ConsumerSerializer(serializers.Serializer):
-    biztype =  serializers.CharField(required=False) 
-    business_name = serializers.CharField(required=False)
-    guid = serializers.CharField(required=False) 
-    tags = serializers.CharField(child = serializers.CharField(), required=False)
-    profileUrl = serializers.CharField(required=False) '''
-    
-    
+ 
     
     

@@ -8,7 +8,7 @@ import requests,jwt
 
 
 def missing_ids(request, relid):
-    print('****')
+
     spe_rel_by_id(relid)
     
     token = request.headers.get("Authorization")
@@ -25,7 +25,7 @@ def missing_ids(request, relid):
     personal_payload = {'docid' : doc['personal']}
 
     result_data = requests.post(url, data = identity_payload, headers=headers)
-    print("---",  result_data.json())
+
     return  result_data.json()['data']
         
 
@@ -56,7 +56,7 @@ def document_details(request, relid):
     personal_payload = { 'docid': doc['personal'] }
     identity_payload = { 'docid': doc['identity'] }
         
-    print(identity_payload, documents)
+
     url = f'{settings.DOCUMENT_SERVICE}api/v1/document/idocs/details'
     headers = {'Authorization': token}
     
@@ -91,7 +91,7 @@ def document_action(request, **kwargs):
 
     
     resp = requests.get(url, headers=headers)
-    print("***",resp.json())
+
     if resp.status_code == 404:
         raise CustomError(f'{resp.json()['msg']}', status.HTTP_404_NOT_FOUND)
         
