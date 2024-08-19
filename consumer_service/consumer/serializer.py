@@ -43,8 +43,7 @@ class RegisterSerializer(serializers.Serializer):
 
 class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
-    coffer_id = serializers.CharField(required=False)
-    custom_uid = serializers.CharField(required=False)
+    #coffer_id = serializers.CharField(required=False)
     first_name = serializers.CharField(required=False)
     last_name = serializers.CharField(required=False)
     email_verified = serializers.BooleanField(required=False) 
@@ -54,7 +53,7 @@ class LoginSerializer(serializers.Serializer):
     mobile = serializers.CharField(required=False)
     pk = serializers.CharField(required=False)
     password_mode = serializers.CharField(required=False)
-    password = serializers.CharField()
+    uid = serializers.CharField(source = 'custom_uid', required=False)
 
     def validate(self, attrs):     
         con = consumer_find({"email": attrs.get("email")})
