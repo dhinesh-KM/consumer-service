@@ -14,7 +14,7 @@ class SharedDocumentView(generics.GenericAPIView):
     
     @validate_payload
     def post(self, request, *args, **kwargs):
-        data = missing_ids(request)
+        data = missing_ids(request, kwargs['rel_id'])
         data = share_docs(data = self.payload['data'], cofferid = request.con['coffer_id'], relid = kwargs['rel_id'], action = kwargs['action'], docs = data)
         return Response(data, status = status.HTTP_201_CREATED)
     

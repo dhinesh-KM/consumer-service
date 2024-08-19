@@ -15,10 +15,9 @@ def share_docs(relid, docs, cofferid, data, action):
     if not spr['isaccepted']:
         raise CustomError("Relationship not accepted.", status.HTTP_202_ACCEPTED)
     
-    print("///",docs)
     id = docs['missingIds']
     length = len(id)
-    print(id)
+
     if length != 0:
         if length == 1:
             err_msg += f'Document with this ID {id[0]} not found' 
@@ -61,12 +60,10 @@ def share_docs(relid, docs, cofferid, data, action):
         for item in data:
             docids.append(item['docid'])
 
-        print(docids,relid,cofferid)
-        f = { 'relationship_id': relid, 'docid': { '$in': docids }, 'shared_by': cofferid }
-        d = SharedDocument.objects(**f)
-        print('==',d)
-        s = SharedDocument.objects(__raw__ = { 'relationship_id': relid, 'docid': { '$in': docids }, 'shared_by': cofferid }).delete()
-        print(s)
+        shr = SharedDocument.objects(__raw__ = { 'relationship_id': relid, 'docid': { '$in': docids }, 'shared_by': cofferid }).delete()
+
+        if shr == 0:
+            raise CustomError(f"Document is not shared with {con.consumer_fullname()}. so first share the document")
         result_msg = f'{name} unshared with {con.consumer_fullname()}.'
         
     return { 'msg': result_msg }

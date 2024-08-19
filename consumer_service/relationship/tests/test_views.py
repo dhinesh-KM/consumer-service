@@ -18,38 +18,6 @@ class SpecRelViewTest(Test):
             'consumerId': str(self.id2)
         }
         
-        '''data1 = {
-            'requestor_type' : 'consumer',
-            'requestor_uid' : self.con1['coffer_id'],
-            'requestor_tags' : ['Personal'],
-            'acceptor_type' : 'consumer',
-            'acceptor_uid' : self.con2['coffer_id'],
-            'acceptor_tags' : ['Personal'],
-            'created' : datetime.datetime.now(),
-            'status' : 'requested',
-            'description' : self.data['description'],
-        }
-        
-        data2 = {
-            'requestor_type' : 'consumer',
-            'requestor_uid' : self.con3['coffer_id'],
-            'requestor_tags' : ['Personal'],
-            'acceptor_type' : 'consumer',
-            'acceptor_uid' : self.con1['coffer_id'],
-            'acceptor_tags' : ['Personal'],
-            'created' : datetime.datetime.now(),
-            'status' : 'accepted',
-            'description' : self.data['description'],
-        }
-        
-        
-        
-        self.spr1 = SpecialRelationship(**data1)
-        self.spr1.save()
-        
-        self.spr2 = SpecialRelationship(**data2)
-        self.spr2.save()
-'''
     
     def test_get_consumers(self):
         response = self.client.get(reverse("get_consumers"))

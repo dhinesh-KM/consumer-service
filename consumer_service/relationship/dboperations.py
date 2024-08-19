@@ -39,7 +39,9 @@ def request_consumer(data, con):
                         'status' : 'requested',
                         'description' : data['description'],
                     }
-            SpecialRelationship(**input_data)
+            spr = SpecialRelationship(**input_data)
+            
+            spr.save()
             
             print(f'\n----VitaGist Relationship request----\n\t\t ${con.consumer_fullname()} has requested you to confirm and accept the relationship with them')
 
@@ -49,8 +51,9 @@ def accept_consumer(data, con, relid):
     spr =  spe_rel_by_id(relid)
 
     if spr.first()['isaccepted']:
+        print('//', spr.first()['isaccepted'])
         raise CustomError('Relationship already accepted.', status.HTTP_409_CONFLICT)
-    
+    print(spr.to_json())
     if data['response'] == 'accept':
             if spr.first()['acceptor_uid'] != con['coffer_id']:
                 raise CustomError('You are not permitted to accept the relationship', status.HTTP_409_CONFLICT)

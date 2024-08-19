@@ -100,8 +100,8 @@ def idoc_operations(data=None, action=None, con=None, citz=None):
         
         
 def getAllDocs(data, cofferid):
-
-    ids = list(map(lambda id: ObjectId(id),data['docid']))
+    input_ids = data.getlist('docid')
+    ids = list(map(lambda id: ObjectId(id),input_ids))
 
     idocs = list(IdentityDocument.objects().aggregate([
         {
@@ -135,15 +135,14 @@ def getAllDocs(data, cofferid):
         }
       ]))
     
-    #print("***",idocs)
     
-    mis_Ids, names = (ids, []) if len(idocs) == 0 else (idocs[0]['missingIds'], idocs[0]['existingNames'])
+    mis_Ids, names = (input_ids, []) if len(idocs) == 0 else (idocs[0]['missingIds'], idocs[0]['existingNames'])
 
     return {'data': {'docname': names, 'missingIds': mis_Ids}}
 
         
 def getAllDocsDetails(data):
-    ids = list(map(lambda id: ObjectId(id),data['docid']))
+    ids = list(map(lambda id: ObjectId(id),data.getlist('docid')))
     return IdentityDocument.objects(id__in =  ids)
 
 def document_action(data):
